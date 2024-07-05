@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#taskInput {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#addTaskBtn {
+    width: 100%;
+    padding: 10px;
+    background: rebeccapurple;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#addTaskBtn:hover {
+    background: rebeccapurple;
+}
+
+#taskList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.task span {
+    flex-grow: 1;
+}
+
+.task button {
+    margin-left: 10px;
+    background: #dc3545;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.task button:hover {
+    background: #c82333;
+}
+
+.editing {
+    background: #fff3cd;
+}
+    </style>
+</head>
+<body>
+    <div class="to do list">
+        <h1>To-Do List</h1>
+        <input type="text" id="taskInput" placeholder="Add a new task...">
+        <button id="addTaskBtn">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+    <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const taskInput = document.getElementById('taskInput');
+    const addTaskBtn = document.getElementById('addTaskBtn');
+    const taskList = document.getElementById('taskList');
+
+    addTaskBtn.addEventListener('click', () => {
+        const taskText = taskInput.value.trim();
+        if (taskText !== '') {
+            addTask(taskText);
+            taskInput.value = '';
+        }
+    });
+
+    function addTask(taskText) {
+        const taskItem = document.createElement('li');
+        taskItem.className = 'task';
+
+        const taskSpan = document.createElement('span');
+        taskSpan.textContent = taskText;
+
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', () => {
+            editTask(taskSpan);
+        });
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', () => {
+            taskList.removeChild(taskItem);
+        });
+
+        taskItem.appendChild(taskSpan);
+        taskItem.appendChild(editBtn);
+        taskItem.appendChild(deleteBtn);
+
+        taskList.appendChild(taskItem);
+    }
+
+    function editTask(taskSpan) {
+        const originalText = taskSpan.textContent;
+        taskSpan.textContent = '';
+
+        const editInput = document.createElement('input');
+        editInput.type = 'text';
+        editInput.value = originalText;
+        editInput.classList.add('editing');
+        
+        const saveBtn = document.createElement('button');
+        saveBtn.textContent = 'Save';
+        saveBtn.addEventListener('click', () => {
+            taskSpan.textContent = editInput.value.trim() === '' ? originalText : editInput.value;
+            taskSpan.removeChild(editInput);
+            taskSpan.removeChild(saveBtn);
+        });
+
+        taskSpan.appendChild(editInput);
+        taskSpan.appendChild(saveBtn);
+    }
+});
+  </script>  
+</body>
+</html>
